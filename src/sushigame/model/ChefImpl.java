@@ -6,6 +6,7 @@ import java.util.List;
 import comp401sushi.Plate;
 import comp401sushi.RedPlate;
 import comp401sushi.Sushi;
+import comp401sushi.IngredientPortion;
 import comp401sushi.Nigiri.NigiriType;
 import comp401sushi.Plate.Color;
 import comp401sushi.Sashimi.SashimiType;
@@ -17,7 +18,9 @@ public class ChefImpl implements Chef, BeltObserver {
 	private String name;
 	private ChefsBelt belt;
 	private boolean already_placed_this_rotation;
-	
+	private double amountConsumed;
+	private double amountSpoiled;
+
 	public ChefImpl(String name, double starting_balance, ChefsBelt belt) {
 		this.name = name;
 		this.balance = starting_balance;
@@ -25,13 +28,15 @@ public class ChefImpl implements Chef, BeltObserver {
 		belt.registerBeltObserver(this);
 		already_placed_this_rotation = false;
 		plate_history = new ArrayList<HistoricalPlate>();
+		amountConsumed = 0;
+		amountSpoiled = 0;
 	}
 
 	@Override
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public void setName(String n) {
 		this.name = n;
@@ -46,7 +51,8 @@ public class ChefImpl implements Chef, BeltObserver {
 		if (history_length > plate_history.size()) {
 			history_length = plate_history.size();
 		}
-		return plate_history.subList(plate_history.size()-history_length, plate_history.size()-1).toArray(new HistoricalPlate[history_length]);
+		return plate_history.subList(plate_history.size() - history_length, plate_history.size() - 1)
+				.toArray(new HistoricalPlate[history_length]);
 	}
 
 	@Override
@@ -60,13 +66,13 @@ public class ChefImpl implements Chef, BeltObserver {
 	}
 
 	@Override
-	public void makeAndPlacePlate(Plate plate, int position) 
+	public void makeAndPlacePlate(Plate plate, int position)
 			throws InsufficientBalanceException, BeltFullException, AlreadyPlacedThisRotationException {
 
 		if (already_placed_this_rotation) {
 			throw new AlreadyPlacedThisRotationException();
 		}
-		
+
 		if (plate.getContents().getCost() > balance) {
 			throw new InsufficientBalanceException();
 		}
@@ -83,17 +89,37 @@ public class ChefImpl implements Chef, BeltObserver {
 				balance += plate.getPrice();
 				Customer consumer = belt.getCustomerAtPosition(((PlateEvent) e).getPosition());
 				plate_history.add(new HistoricalPlateImpl(plate, consumer));
+				IngredientPortion[] tempIngredients = plate.getContents().getIngredients();
+				for (int i = 0; i < tempIngredients.length; i++) {
+					amountConsumed += tempIngredients[i].getAmount();
+				}
 			}
 		} else if (e.getType() == BeltEvent.EventType.PLATE_SPOILED) {
 			Plate plate = ((PlateEvent) e).getPlate();
 			plate_history.add(new HistoricalPlateImpl(plate, null));
+			for (int i = 0; i < plate_history.size(); i++) {
+				if (plate_history.get(i).getConsumer() == null) {
+					IngredientPortion[] SpoiledIngredients = plate_history.get(i).getContents().getIngredients();
+					amountSpoiled += SpoiledIngredients[i].getAmount();
+				}
+			}
 		} else if (e.getType() == BeltEvent.EventType.ROTATE) {
 			already_placed_this_rotation = false;
 		}
 	}
-	
+
 	@Override
 	public boolean alreadyPlacedThisRotation() {
 		return already_placed_this_rotation;
+	}
+
+	@Override
+	public double getAmountConsumed() {
+		return amountConsumed;
+	}
+
+	@Override
+	public double getAmountSpoiled() {
+		return amountSpoiled;
 	}
 }
