@@ -66,23 +66,23 @@ public class PlayerChefView extends JPanel implements ActionListener {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		whole_panel.setMaximumSize(new Dimension(700, 600));
-		whole_panel.setPreferredSize(new Dimension(700, 500));
+		whole_panel.setMaximumSize(new Dimension(600, 600));
+		whole_panel.setPreferredSize(new Dimension(600, 600));
 		whole_panel.setLayout(new BoxLayout(whole_panel, BoxLayout.Y_AXIS));
 
 		plate_field = new JTextField(5);
-		plate_field.setMaximumSize(new Dimension(150, 50));
+		plate_field.setMaximumSize(new Dimension(90, 50));
 		intro_panel.add(new JLabel("Plate Color: "), BorderLayout.WEST);
 		intro_panel.add(plate_field, BorderLayout.EAST);
 
 		plate_index_field = new JTextField(5);
-		plate_index_field.setMaximumSize(new Dimension(100, 50));
+		plate_index_field.setMaximumSize(new Dimension(90, 50));
 		intro_panel.add(new JLabel("Plate location: "), BorderLayout.WEST);
 		intro_panel.add(plate_index_field, BorderLayout.EAST);
 
 		sushi_type_field = new JTextField(5);
-		sushi_type_field.setMaximumSize(new Dimension(150, 50));
-		intro_panel.add(new JLabel("Sushi Type: Sashimi, Nigiri, Roll "));
+		sushi_type_field.setMaximumSize(new Dimension(90, 50));
+		intro_panel.add(new JLabel("Sashimi, Nigiri, or Roll "));
 		intro_panel.add(sushi_type_field);
 
 		whole_panel.add(intro_panel);
@@ -107,46 +107,54 @@ public class PlayerChefView extends JPanel implements ActionListener {
 		ingr_panel.setLayout(new BoxLayout(ingr_panel, BoxLayout.Y_AXIS));
 
 		JLabel roll_instruct_label = new JLabel();
-		roll_instruct_label.setText("Choose Amounts (cannot excede 1.5): ");
+		roll_instruct_label.setText("Choose Amounts (amounts over 1.5 oz default to 1.5): ");
 		ingr_panel.add(roll_instruct_label, BorderLayout.WEST);
 
 		avocado = new JTextField(5);
 		avocado.setMaximumSize(new Dimension(100, 50));
+		avocado.setText("0.0");
 		ingr_panel.add(new JLabel("Avocado: "), BorderLayout.WEST);
 		ingr_panel.add(avocado, BorderLayout.EAST);
 
 		seaweed = new JTextField(5);
 		seaweed.setMaximumSize(new Dimension(100, 50));
+		seaweed.setText("0.0");
 		ingr_panel.add(new JLabel("Seaweed: "), BorderLayout.WEST);
 		ingr_panel.add(seaweed, BorderLayout.EAST);
 
 		eel = new JTextField(5);
 		eel.setMaximumSize(new Dimension(100, 50));
+		eel.setText("0.0");
 		ingr_panel.add(new JLabel("Eel: "), BorderLayout.WEST);
 		ingr_panel.add(eel, BorderLayout.EAST);
 
 		rice = new JTextField(5);
 		rice.setMaximumSize(new Dimension(100, 50));
+		rice.setText("0.0");
 		ingr_panel.add(new JLabel("Rice: "), BorderLayout.WEST);
 		ingr_panel.add(rice, BorderLayout.EAST);
 
 		crab = new JTextField(5);
 		crab.setMaximumSize(new Dimension(100, 50));
+		crab.setText("0.0");
 		ingr_panel.add(new JLabel("Crab: "), BorderLayout.WEST);
 		ingr_panel.add(crab, BorderLayout.EAST);
 
 		shrimp = new JTextField(5);
 		shrimp.setMaximumSize(new Dimension(100, 50));
+		shrimp.setText("0.0");
 		ingr_panel.add(new JLabel("Shrimp: "), BorderLayout.WEST);
 		ingr_panel.add(shrimp, BorderLayout.EAST);
 
 		tuna = new JTextField(5);
 		tuna.setMaximumSize(new Dimension(100, 50));
+		tuna.setText("0.0");
 		ingr_panel.add(new JLabel("Tuna: "));
 		ingr_panel.add(tuna, BorderLayout.EAST);
 
 		yellowtail = new JTextField(5);
 		yellowtail.setMaximumSize(new Dimension(100, 50));
+		yellowtail.setText("0.0");
 		ingr_panel.add(new JLabel("Yellowtail: "), BorderLayout.WEST);
 		ingr_panel.add(yellowtail, BorderLayout.EAST);
 
@@ -239,7 +247,7 @@ public class PlayerChefView extends JPanel implements ActionListener {
 					custom_sushi = new Sashimi(Sashimi.SashimiType.SHRIMP);
 					break;
 				default:
-					error_label.setText("Invalid sashimi");
+					error_label.add(new JLabel("invalid"));
 					break;
 				}
 				break;
@@ -247,56 +255,97 @@ public class PlayerChefView extends JPanel implements ActionListener {
 				firstIngArray = new IngredientPortion[8];
 				portion_counter = 0;
 				try {
-				if ((Double.parseDouble(avocado.getText()) != 0.0) && (Double.parseDouble(avocado.getText()) < 1.5)) {
-					AvocadoPortion avocadoPortion = new AvocadoPortion(Double.parseDouble(avocado.getText()));
-					firstIngArray[portion_counter] = avocadoPortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(seaweed.getText()) != 0.0) && (Double.parseDouble(seaweed.getText()) < 1.5)) {
-					SeaweedPortion seaweedPortion = new SeaweedPortion(Double.parseDouble(seaweed.getText()));
-					firstIngArray[portion_counter] = seaweedPortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(eel.getText()) != 0.0) && (Double.parseDouble(eel.getText()) < 1.5)) {
-					EelPortion eelPortion = new EelPortion(Double.parseDouble(eel.getText()));
-					firstIngArray[portion_counter] = eelPortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(rice.getText()) != 0.0) && (Double.parseDouble(rice.getText()) < 1.5)) {
-					RicePortion ricePortion = new RicePortion(Double.parseDouble(rice.getText()));
-					firstIngArray[portion_counter] = ricePortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(crab.getText()) != 0.0) && (Double.parseDouble(crab.getText()) < 1.5)) {
-					CrabPortion crabPortion = new CrabPortion(Double.parseDouble(crab.getText()));
-					firstIngArray[portion_counter] = crabPortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(shrimp.getText()) != 0.0) && (Double.parseDouble(shrimp.getText()) < 1.5)) {
-					ShrimpPortion shrimpPortion = new ShrimpPortion(Double.parseDouble(shrimp.getText()));
-					firstIngArray[portion_counter] = shrimpPortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(tuna.getText()) != 0.0) && (Double.parseDouble(tuna.getText()) < 1.5)) {
-					TunaPortion tunaPortion = new TunaPortion(Double.parseDouble(tuna.getText()));
-					firstIngArray[portion_counter] = tunaPortion;
-					portion_counter++;
-				}
-				if ((Double.parseDouble(yellowtail.getText()) != 0.0) && (Double.parseDouble(yellowtail.getText()) < 1.5)) {
-					YellowtailPortion yellowtailPortion = new YellowtailPortion(Double.parseDouble(yellowtail.getText()));
-					firstIngArray[portion_counter] = yellowtailPortion;
-					portion_counter++;
-				}
-				finalIngArray = new IngredientPortion[portion_counter];
-				for (int i = 0; i < portion_counter; i++) {
-					finalIngArray[i] = firstIngArray[i];
-				}
-				custom_sushi = new Roll(roll_name_field.getText() + " Roll", finalIngArray);
-				} catch(Exception exception) {
-					error_label.setText("Invalid");
+					if ((Double.parseDouble(avocado.getText()) != 0.0) && (Double.parseDouble(avocado.getText()) < 1.5)
+							&& (avocado.getText() != null)) {
+						AvocadoPortion avocadoPortion = new AvocadoPortion(Double.parseDouble(avocado.getText()));
+						firstIngArray[portion_counter] = avocadoPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(avocado.getText()) > 1.5) {
+						AvocadoPortion avocadoPortion = new AvocadoPortion(1.5);
+						firstIngArray[portion_counter] = avocadoPortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(seaweed.getText()) != 0.0) && (Double.parseDouble(seaweed.getText()) < 1.5)
+							&& (seaweed.getText() != null)) {
+						SeaweedPortion seaweedPortion = new SeaweedPortion(Double.parseDouble(seaweed.getText()));
+						firstIngArray[portion_counter] = seaweedPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(seaweed.getText()) > 1.5) {
+						SeaweedPortion seaweedPortion = new SeaweedPortion(1.5);
+						firstIngArray[portion_counter] = seaweedPortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(eel.getText()) != 0.0) && (Double.parseDouble(eel.getText()) < 1.5)
+							&& (eel.getText() != null)) {
+						EelPortion eelPortion = new EelPortion(Double.parseDouble(eel.getText()));
+						firstIngArray[portion_counter] = eelPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(eel.getText()) > 1.5) {
+						EelPortion eelPortion = new EelPortion(1.5);
+						firstIngArray[portion_counter] = eelPortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(rice.getText()) != 0.0) && (Double.parseDouble(rice.getText()) < 1.5)
+							&& (rice.getText() != null)) {
+						RicePortion ricePortion = new RicePortion(Double.parseDouble(rice.getText()));
+						firstIngArray[portion_counter] = ricePortion;
+						portion_counter++;
+					} else if (Double.parseDouble(rice.getText()) > 1.5) {
+						RicePortion ricePortion = new RicePortion(1.5);
+						firstIngArray[portion_counter] = ricePortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(crab.getText()) != 0.0) && (Double.parseDouble(crab.getText()) < 1.5)
+							&& (crab.getText() != null)) {
+						CrabPortion crabPortion = new CrabPortion(Double.parseDouble(crab.getText()));
+						firstIngArray[portion_counter] = crabPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(crab.getText()) > 1.5) {
+						CrabPortion crabPortion = new CrabPortion(1.5);
+						firstIngArray[portion_counter] = crabPortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(shrimp.getText()) != 0.0) && (Double.parseDouble(shrimp.getText()) < 1.5)
+							&& (shrimp.getText() != null)) {
+						ShrimpPortion shrimpPortion = new ShrimpPortion(Double.parseDouble(shrimp.getText()));
+						firstIngArray[portion_counter] = shrimpPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(shrimp.getText()) > 1.5) {
+						ShrimpPortion shrimpPortion = new ShrimpPortion(1.5);
+						firstIngArray[portion_counter] = shrimpPortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(tuna.getText()) != 0.0) && (Double.parseDouble(tuna.getText()) < 1.5)
+							&& (tuna.getText() != null)) {
+						TunaPortion tunaPortion = new TunaPortion(Double.parseDouble(tuna.getText()));
+						firstIngArray[portion_counter] = tunaPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(tuna.getText()) > 1.5) {
+						TunaPortion tunaPortion = new TunaPortion(1.5);
+						firstIngArray[portion_counter] = tunaPortion;
+						portion_counter++;
+					}
+					if ((Double.parseDouble(yellowtail.getText()) != 0.0)
+							&& (Double.parseDouble(yellowtail.getText()) < 1.5) && (yellowtail.getText() != null)) {
+						YellowtailPortion yellowtailPortion = new YellowtailPortion(
+								Double.parseDouble(yellowtail.getText()));
+						firstIngArray[portion_counter] = yellowtailPortion;
+						portion_counter++;
+					} else if (Double.parseDouble(yellowtail.getText()) > 1.5) {
+						YellowtailPortion yellowtailPortion = new YellowtailPortion(1.5);
+						firstIngArray[portion_counter] = yellowtailPortion;
+						portion_counter++;
+					}
+					finalIngArray = new IngredientPortion[portion_counter];
+					for (int i = 0; i < portion_counter; i++) {
+						finalIngArray[i] = firstIngArray[i];
+					}
+					custom_sushi = new Roll(roll_name_field.getText() + " Roll", finalIngArray);
+				} catch (Exception exception) {
+					error_label.add(new JLabel("invalid"));
 				}
 				break;
-			} 
+			}
 			try {
 				switch (plate_field.getText().toLowerCase()) {
 				case "red":
@@ -309,16 +358,18 @@ public class PlayerChefView extends JPanel implements ActionListener {
 					makeBluePlateRequest(custom_sushi, Integer.parseInt(plate_index_field.getText()));
 					break;
 				case "gold":
-					if ((Double.parseDouble(gold_price.getText()) < 10.0) && (Double.parseDouble(gold_price.getText()) > 5.0)) {
-						makeGoldPlateRequest(custom_sushi, Integer.parseInt(plate_index_field.getText()),Double.parseDouble(gold_price.getText()));
+					if ((Double.parseDouble(gold_price.getText()) < 10.0)
+							&& (Double.parseDouble(gold_price.getText()) > 5.0)) {
+						makeGoldPlateRequest(custom_sushi, Integer.parseInt(plate_index_field.getText()),
+								Double.parseDouble(gold_price.getText()));
 					}
 					break;
 				default:
-					error_label.setText("Invalid");
+					error_label.add(new JLabel("invalid"));
 					break;
 				}
 			} catch (Exception exception) {
-				error_label.setText("Invalid");
+				error_label.add(new JLabel("invalid"));
 			}
 			plate_field.setText("");
 			plate_index_field.setText("");
@@ -326,17 +377,16 @@ public class PlayerChefView extends JPanel implements ActionListener {
 			sashimi_type_field.setText("");
 			nigiri_type_field.setText("");
 			roll_name_field.setText("");
-			avocado.setText("");
-			seaweed.setText("");
-			rice.setText("");
-			crab.setText("");
-			shrimp.setText("");
-			tuna.setText("");
-			eel.setText("");
-			yellowtail.setText("");
-			gold_price.setText("");
+			avocado.setText("0.0");
+			seaweed.setText("0.0");
+			rice.setText("0.0");
+			crab.setText("0.0");
+			shrimp.setText("0.0");
+			tuna.setText("0.0");
+			eel.setText("0.0");
+			yellowtail.setText("0.0");
+			gold_price.setText("0.0");
 		}
 
 	}
 }
-
